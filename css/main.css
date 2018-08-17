@@ -1,24 +1,22 @@
 /* applies to anything of class "example-class-selector" */
-.example-class-selector {
+/*.example-class-selector {
 	margin-top: 2em;
 
 }
+*/
 
-/* applies to any <p> descendants of an element of class "example-class-selector" */
-.example-class-selector p {
-	/* Colors are in hexadecimal: http://www.colorpicker.com/ */
-	color: #CC00AA;
-
-}
 .project {
-    margin-left: 10px;
+    margin-left: -10px;
+    /*background-color: blue;*/
 }
 
 /* this style exists to make it obvious that you've successfully linked
    the CSS to the page. feel free to remove it once the link is working. */
 body {
-     border: 1px dotted gray;
+     border: 1px dotted red;
      padding: 20px;
+     background-color: #B4D4F0;
+     
 }
 
 .jumbotron-container {
@@ -26,5 +24,26 @@ body {
      margin-top: 50px;
      margin-bottom: 20px;
      padding: 20px;
+     margin-left: 75px;
 }
 
+p{
+    font-family: Times New Roman;
+    font-size: 14px;
+
+}
+
+.img-fluid{
+    margin-left: 150px;
+}
+
+h1 {
+    font-family: Times New Roman;
+    font-size:40px;
+    color: #DB81DA;
+
+}
+
+a {
+    margin-left: 10px;
+}
