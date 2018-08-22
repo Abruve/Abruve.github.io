@@ -13,11 +13,19 @@ function initializePage() {
 	console.log("Javascript is connected!");
 }
 
-
+/*
 $(".img-thumbnail").click(projectClick);
 
 function projectClick(e){
 	e.preventDefault();
-	$(this).css("background-color", "#7FFF00")
+	$(this).css("background-color", "#CCCC78")
 	console.log("Correct!");
+}*/
+
+$("p").click(projectClick);
+
+function projectClick(e){
+	e.preventDefault();
+	$(this).css("color", "#78CCA2")
+	console.log("Changed!");
 }

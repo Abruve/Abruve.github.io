@@ -15,9 +15,11 @@
 body {
      border: 1px dotted red;
      padding: 20px;
-     background-color: #B4D4F0;
+     background-color: #78CCA2;
      
 }
+
+
 
 .jumbotron-container {
 	position: relative;
@@ -29,21 +31,34 @@ body {
 
 p{
     font-family: Times New Roman;
-    font-size: 14px;
-
+    font-size: 20px;
+    color: #000000;
 }
 
-.img-fluid{
-    margin-left: 150px;
-}
 
 h1 {
     font-family: Times New Roman;
     font-size:40px;
-    color: #DB81DA;
+    color: #CC78A2;
 
 }
 
+h2 {
+    font-family: Times New Roman;
+    font-size:40px;
+    color: #CC78A2;
+
+}
+h4 {
+    font-family: Times New Roman;
+    font-size:30px;
+    color: #CC78A2;
+
+}
 a {
     margin-left: 10px;
+    color:blue;
+}
+.bottom-contact{
+    margin-left: 200px;
 }
