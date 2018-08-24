@@ -21,11 +21,18 @@ function projectClick(e){
 	$(this).css("background-color", "#CCCC78")
 	console.log("Correct!");
 }*/
-
+/*
 $("p").click(projectClick);
 
 function projectClick(e){
 	e.preventDefault();
 	$(this).css("color", "#78CCA2")
 	console.log("Changed!");
+}*/
+
+$("h3").click(projectClick);
+
+function projectClick(e){
+	e.preventDefault();
+	$(this).parent().next().toggle();
 }
