@@ -30,9 +30,15 @@ function projectClick(e){
 	console.log("Changed!");
 }*/
 
-$("h3").click(projectClick);
+$("h2").click(projectClick);
 
 function projectClick(e){
 	e.preventDefault();
-	$(this).parent().next().toggle();
+	$(this).parent().toggle();
+}
+$("p").click(projectClick);
+
+function projectClick(e){
+	e.preventDefault();
+	$(this).parent().toggle();
 }
