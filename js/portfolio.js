@@ -36,7 +36,8 @@ function projectClick(e){
 	e.preventDefault();
 	$(this).parent().toggle();
 }
-$("p").click(projectClick);
+
+$(".img-thumbnail").click(projectClick);
 
 function projectClick(e){
 	e.preventDefault();

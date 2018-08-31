@@ -1,6 +1,163 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<script type="text/javascript">
+// <![CDATA[
+var sparks=75; // how many sparks per clicksplosion
+var speed=33; // how fast - smaller is faster
+var bangs=5; // how many can be launched simultaneously (note that using too many can slow the script down)
+var colours=new Array('#03f', '#f03', '#0e0', '#93f', '#0cf', '#f93', '#f0c'); 
+//                     blue    red     green   purple  cyan    orange  pink
+
+/****************************
+*   Clicksplosion Effect    *
+*(c)2012-3 mf2fm web-design *
+*  http://www.mf2fm.com/rv  *
+* DON'T EDIT BELOW THIS BOX *
+****************************/
+var intensity=new Array();
+var Xpos=new Array();
+var Ypos=new Array();
+var dX=new Array();
+var dY=new Array();
+var stars=new Array();
+var decay=new Array();
+var timers=new Array();
+var swide=800;
+var shigh=600;
+var sleft=sdown=0;
+var count=0;
+
+function addLoadEvent(funky) {
+  var oldonload=window.onload;
+  if (typeof(oldonload)!='function') window.onload=funky;
+  else window.onload=function() {
+    if (oldonload) oldonload();
+    funky();
+  }
+}
+
+addLoadEvent(clicksplode);
+
+function clicksplode() { if (document.getElementById) {
+  var i, j;
+  window.onscroll=set_scroll;
+  window.onresize=set_width;
+  document.onclick=eksplode;
+  set_width();
+  set_scroll();
+  for (i=0; i<bangs; i++) for (j=sparks*i; j<sparks+sparks*i; j++) {
+    stars[j]=createDiv('*', 13);
+    document.body.appendChild(stars[j]);
+  }
+}}
+
+function createDiv(char, size) {
+  var div, sty;
+  div=document.createElement('div');
+  sty=div.style;
+  sty.font=size+'px monospace';
+  sty.position='absolute';
+  sty.backgroundColor='transparent';
+  sty.visibility='hidden';
+  sty.zIndex='101';
+  div.appendChild(document.createTextNode(char));
+  return (div);
+}
+
+function bang(N) {
+  var i, Z, A=0;
+  for (i=sparks*N; i<sparks*(N+1); i++) { 
+    if (decay[i]) {
+      Z=stars[i].style;
+      Xpos[i]+=dX[i];
+      Ypos[i]+=(dY[i]+=1.25/intensity[N]);
+      if (Xpos[i]>=swide || Xpos[i]<0 || Ypos[i]>=shigh+sdown || Ypos[i]<0) decay[i]=1;
+	  else {
+        Z.left=Xpos[i]+'px';
+        Z.top=Ypos[i]+'px';
+	  }
+      if (decay[i]==15) Z.fontSize='7px';
+      else if (decay[i]==7) Z.fontSize='2px';
+      else if (decay[i]==1) Z.visibility='hidden';
+	  decay[i]--;
+	}
+	else A++;
+  }
+  if (A!=sparks) timers[N]=setTimeout('bang('+N+')', speed);
+}
+
+function eksplode(e) { 
+  var x, y, i, M, Z, N;
+  set_scroll();
+  y=(e)?e.pageY:event.y+sdown;
+  x=(e)?e.pageX:event.x+sleft;
+  N=++count%bangs;
+  M=Math.floor(Math.random()*3*colours.length);
+  intensity[N]=5+Math.random()*4;
+  for (i=N*sparks; i<(N+1)*sparks; i++) {
+    Xpos[i]=x;
+    Ypos[i]=y-5;
+    dY[i]=(Math.random()-0.5)*intensity[N];
+    dX[i]=(Math.random()-0.5)*(intensity[N]-Math.abs(dY[i]))*1.25;
+    decay[i]=16+Math.floor(Math.random()*16);
+    Z=stars[i].style;
+    if (M<colours.length) Z.color=colours[i%2?count%colours.length:M];
+    else if (M<2*colours.length) Z.color=colours[count%colours.length];
+    else Z.color=colours[i%colours.length];
+    Z.fontSize='13px';
+    Z.visibility='visible';
+  }
+  clearTimeout(timers[N]);
+  bang(N);
+} 
+
+function set_width() {
+  var sw_min=999999;
+  var sh_min=999999;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    if (document.documentElement.clientWidth>0) sw_min=document.documentElement.clientWidth;
+    if (document.documentElement.clientHeight>0) sh_min=document.documentElement.clientHeight;
+  }
+  if (typeof(self.innerWidth)=='number' && self.innerWidth) {
+    if (self.innerWidth>0 && self.innerWidth<sw_min) sw_min=self.innerWidth;
+    if (self.innerHeight>0 && self.innerHeight<sh_min) sh_min=self.innerHeight;
+  }
+  if (document.body.clientWidth) {
+    if (document.body.clientWidth>0 && document.body.clientWidth<sw_min) sw_min=document.body.clientWidth;
+    if (document.body.clientHeight>0 && document.body.clientHeight<sh_min) sh_min=document.body.clientHeight;
+  }
+  if (sw_min==999999 || sh_min==999999) {
+    sw_min=800;
+    sh_min=600;
+  }
+  swide=sw_min-7;
+  shigh=sh_min-7;
+}
+
+function set_scroll() {
+  if (typeof(self.pageYOffset)=='number') {
+    sdown=self.pageYOffset;
+    sleft=self.pageXOffset;
+  }
+  else if (document.body && (document.body.scrollTop || document.body.scrollLeft)) {
+    sdown=document.body.scrollTop;
+    sleft=document.body.scrollLeft;
+  }
+  else if (document.documentElement && (document.documentElement.scrollTop || document.documentElement.scrollLeft)) {
+    sleft=document.documentElement.scrollLeft;
+    sdown=document.documentElement.scrollTop;
+  }
+  else {
+    sdown=0;
+    sleft=0;
+  }
+}
+// ]]>
+</script>
+
 <head>
 	<title>Personal Portfolio</title>
 	<meta charset="utf-8">
@@ -8,19 +165,12 @@
 	<link href="css/main.css" rel="stylesheet">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- this is a comment in HTML -->
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+	
     <link href="css/main.css" rel="stylesheet">
 </head>
 
 <body>
-		<!-- h1 through h6 are headers. The higher the number, the smaller the header -->
-		<!-- p means paragraph -->
+		
 	<div class="jumbotron-container">
 		<h1>Abraham R. Velasquez</h1>
 	</div>
@@ -60,9 +210,6 @@
 				<br>
 				<div>
 					<a class="btn btn-primary btn-lg" href="https://www.what-dog.net/Images/faces2/scroll008.jpg" role="button">A Dog</a>
-					
-					<!-- 
-					<button type="button" class="btn btn-primary btn-lg">Download</button> -->
 				</div>
 				
 			</div>
@@ -71,42 +218,40 @@
 				<div id ="about"></div>
 				<h2> About Me </h2>
 				<p> Hi y'all name is Abraham I'm a third year college student at UCSD. I am an Applied Mathematics student who is currently getting a minor in Math Education and Philosophy. I plan on going into the Masters and Teacher credential program that they have here at UCSD after I get my degree. The philosophy minor is simply because I enjoy philosophy and the kinds of questions they pose to our base understanding of our choices and ideals. </p>
-			</div>
-				<div>
 				<a href = "docs/Abraham R. Velasquez Resume.pdf">Resume</a>
 					</div>
 		</div>
 		<br>
-		<div class="col-md-12" >
-			<div id ="projects"></div>
+		<div class="col-md-12"  id ="projects" >
 			<h2>Projects</h2>
 		<!-- divs are invisible structuring elements that stack vertically by default. Use them to organize your code -->
 		<!-- img tags are images. Lorem Pixel will deliver random images; handy! -->
 		<!-- a are anchors, also known as hyperlinks. Use the href attribute to tell the browser where to go when the user clicks -->
 			<p> Here are a few projects I am a part of and work on through my time here at UCSD. </p>
 		</div>
-		<br>
 		<div >
 			<div class="project col-md-3" id="project1">
-				<a href="https://www.facebook.com/ElPuebloUnidoUCSD/">
-					<img src="images/rsz_project1.jpg" class="img-thumbnail" alt="Lorem Pixel image"/>
-				
+				<a href="https://www.facebook.com/ElPuebloUnidoUCSD/" id = "link">
 					<p>Student Labor Commission</p>
 				</a>
+				<img src="images/rsz_project1.jpg" class="img-thumbnail" alt="Lorem Pixel image"/>
+				
 				<p class="project-text">A project I am working on is the support and presentation of labor union issues on campus. To provide support for union works, but also connect them with students who may not be aware of the issues they face.</p>
 			</div>
 			<div class="project col-md-3" id="project2">
-				<a href="https://www.instagram.com/abrahamvelasquez5/?hl=en">
-					<img src="images/rsz_project2.jpg" class="img-thumbnail" alt="Lorem Pixel image">
-					<p>Creative Education</p>
+				<a href="https://www.instagram.com/abrahamvelasquez5/?hl=en" id = "link">
+					<p>Art and Comics</p>
 				</a>
+				<img src="images/rsz_project2.jpg" class="img-thumbnail" alt="Lorem Pixel image">
+
 				<p class="project-text">In addition to tackling social in my community I also enjoy practicing viual arts, usually through the medium of sharpie or acrylics. While some of these pieces can have a serious underlying theme that flows through the work, others are simply an expression of a flowing imagination.</p>
 			</div>
 			<div class="project col-md-3" id="project3">
-				<a href="https://students.ucsd.edu/sponsor/success/">
-					<img src="images/SSC.1.jpg" class="img-thumbnail" alt="Lorem Pixel image">
+				<a href="https://students.ucsd.edu/sponsor/success/" id = "link">
 					<p>Student Success Coaching</p>
 				</a>
+				<img src="images/SSC.1.jpg" class="img-thumbnail" alt="Lorem Pixel image">
+				
 				<p class="project-text">Lastly, I participate and will soon be working in the Student Success Coaching. Student Success Coaching provides support and guidence to first generation students through workshops, counseloring, and referrals to different services on campus. </p>
 			</div>
 		</div>
@@ -116,7 +261,7 @@
 		<h4>Contact</h4>
 	</div>
 	<div class="contact bottom-contact">
-		<a href="#">a9velasq@ucsd.edu</a>
+		<a href="mailto:a9velasq@ucsd.edu">a9velasq@ucsd.edu</a>
 		<!-- <a href="mailto:tngoon" class="fa fa-envelope fa-lg"></a>
 		<a href="#" class="fa fa-github fa-lg"></a> -->
 	</div>
